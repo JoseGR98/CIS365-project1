@@ -105,7 +105,15 @@ class ReflexCaptureAgent(CaptureAgent):
         if(self.nodeShouldBeOpened(s, openNodes, closedNodes)):
           openNodes.append(s)
       closedNodes.append(currentNode)
+      self.retreatToBase(gameState)
     return None
+
+  def retreatToBase(self, gameState):
+      self.start = gameState.getAgentPosition(self.index)
+      print("The position is" + str(self.start))
+
+      if( len(self.getFood(gameState).asList()) <= 2 ):
+        print("There is only 2 or less food left")
 
   def findLowestTotalCostNodeAndPop(self, openList):
     lowestNode = openList[0]
