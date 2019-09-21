@@ -106,16 +106,29 @@ class ReflexCaptureAgent(CaptureAgent):
         if(self.nodeShouldBeOpened(s, openNodes, closedNodes)):
           openNodes.append(s)
       closedNodes.append(currentNode)
-      self.retreatToBase(gameState)
+    
+      if( len(self.getFood(gameState).asList()) <= 2 ):
+        print("There is only 2 or less food left. RETREAT")
+        self.retreatToBase(gameState)
+
     return None
 
   def retreatToBase(self, gameState):
       self.start = gameState.getAgentPosition(self.index)
+      valueX, valueY = node.state.getAgentPosition(self.index)
       print("The position is" + str(self.start))
 
-      if( len(self.getFood(gameState).asList()) <= 2 ):
-        print("There is only 2 or less food left")
+      posibleValidDestinations = [] #Array that would store the boxes in which pacman could be able to reach, in order to save the points
+      h = 1 
+      for h in range(15): #15 --> The high of the matrix map (15-1=14) The h is the row that is going to change, from 1 (first possible free space) to  14 (last possible free space)
+        if( str(gameState.data.layout.walls[h][16]) == "False" ):  #
+          print("SpaceAvailable: (" + h + ",16)")
+          posibleValidDestinations.apend(h)
 
+      #(Implement) call a function that obtain the path, with the closest vertical middle free space as destination
+      # Use each valid destination as a destination. Compare all the possible cost and use the path with the minimum amount.
+
+     
   def findLowestTotalCostNodeAndPop(self, openList):
     lowestNode = openList[0]
     lowIndex = 0
