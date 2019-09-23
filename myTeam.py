@@ -149,7 +149,7 @@ class ReflexCaptureAgent(CaptureAgent):
 
     return None
 
-  def retreatToBase(self, gameState):
+  def retreatToAnyBaseSpace(self, gameState):
     self.start = gameState.getAgentPosition(self.index)
     valueX, valueY = node.state.getAgentPosition(self.index)
     print("The position is" + str(self.start))
@@ -158,13 +158,15 @@ class ReflexCaptureAgent(CaptureAgent):
     costOfPaths = []
     h = 1 
     for h in range(15):
-      if( str(gameState.data.layout.walls[h][16]) == "False" ): 
-        print("SpaceAvailable: (" + h + ",16)")
-        posibleValidDestinations.apend(h)
-        costOnly = findPathAndCost() #Give this parameter --> (h,16) to the function as the final destination. And return only cost, not path
-        costOfPaths.append(costOnly)
+      if( str(gameState.data.layout.walls[h][16]) == "False" ):
+        if ( str(gameState.data.layout.walls[h][16-1]) == "False" && str(gameState.data.layout.walls[h][16+1]) == "False" ): 
+          print("SpaceAvailable: (" + h + ",16)")
+          posibleValidDestinations.apend(h)
+          pathCostTuple = findPathAndCost(self, gameState, agentIndex, (h,16), maxCost) #Give this parameter --> (h,16) to the function as the final destination. And return only cost, not path
+          cost = pathCostTuple[1]
+          costOfPaths.append(cost)
 
-    findPathAndCost() #Give this parameter --> (costOfPaths.index(min(costOfPaths)),16) to the function as the final destination. This would be the true destination.
+    findPathAndCost(self, gameState, agentIndex, (costOfPaths.index(min(costOfPaths)),16), maxCost) #Give this parameter --> (costOfPaths.index(min(costOfPaths)),16) to the function as the final destination. This would be the true destination.
      
   def findLowestTotalCostNodeAndPop(self, openList):
     lowestNode = openList[0]
